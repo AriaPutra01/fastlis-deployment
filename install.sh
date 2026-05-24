@@ -25,7 +25,7 @@ APP_NAME=${APP_NAME:-fastlis}
 read -p "Enter Installation Path [/opt/fastlis]: " INSTALL_PATH
 INSTALL_PATH=${INSTALL_PATH:-/opt/fastlis}
 
-read -p "Enter GitHub Token (leave empty if repo is public): " GITHUB_TOKEN
+read -p "Enter GitHub Token: " GITHUB_TOKEN
 
 read -p "Update frequency (realtime/daily/weekly) [daily]: " UPDATE_FREQ
 UPDATE_FREQ=${UPDATE_FREQ:-daily}
@@ -125,7 +125,7 @@ REDIS_PASSWORD=$REDIS_PASSWORD
 
 # Security
 JWT_SECRET=$JWT_SECRET
-JWT_ACCESS_EXPIRY=15
+JWT_ACCESS_EXPIRY=60
 JWT_REFRESH_EXPIRY=7
 LOG_LEVEL=4
 EOF
@@ -150,6 +150,11 @@ fi
 # STEP 6: FIRST DEPLOYMENT
 # ============================================
 echo -e "${BLUE}=== Step 6: First Deployment ===${NC}"
+
+if [ ! -z "$GITHUB_TOKEN" ]; then
+  echo -e "${YELLOW}Logging in to GitHub Container Registry (GHCR)...${NC}"
+  echo $GITHUB_TOKEN | docker login ghcr.io -u AriaPutra01 --password-stdin
+fi
 
 docker compose pull || true
 docker compose up -d
