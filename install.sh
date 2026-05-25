@@ -56,6 +56,7 @@ install_docker() {
   echo -e "${YELLOW}Installing Docker...${NC}"
   curl -fsSL https://get.docker.com -o get-docker.sh
   sudo sh get-docker.sh
+  rm -f get-docker.sh
   sudo usermod -aG docker $USER
   echo -e "${GREEN}✓ Docker installed (user relogin diperlukan)${NC}"
 }
