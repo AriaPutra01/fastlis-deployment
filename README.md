@@ -32,7 +32,7 @@ Berikut adalah bagaimana ekosistem LIMS Anda bekerja dari hulu (Developer) ke hi
 
 1. Klien / Teknisi Anda mengeksekusi perintah 1-klik:
    ```bash
-   curl -H "Authorization: token MASUKKAN_TOKEN_DISINI" -fsSL https://raw.githubusercontent.com/AriaPutra01/fastlis-deployment/main/install.sh | bash
+   curl -fsSL https://raw.githubusercontent.com/AriaPutra01/fastlis-deployment/main/install.sh | bash
    ```
 2. `install.sh` melakukan keajaibannya:
    - Memastikan Docker & Docker Compose terinstal.
