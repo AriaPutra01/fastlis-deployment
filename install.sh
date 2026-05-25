@@ -19,22 +19,22 @@ NC='\033[0m'
 # ============================================
 echo -e "${BLUE}=== Step 1: Basic Configuration ===${NC}"
 
-read -p "Enter App Name [fastlis]: " APP_NAME
+read -p "Enter App Name [fastlis]: " APP_NAME < /dev/tty
 APP_NAME=${APP_NAME:-fastlis}
 
-read -p "Enter Installation Path [/opt/fastlis]: " INSTALL_PATH
+read -p "Enter Installation Path [/opt/fastlis]: " INSTALL_PATH < /dev/tty
 INSTALL_PATH=${INSTALL_PATH:-/opt/fastlis}
 
-read -p "Enter GitHub Token: " GITHUB_TOKEN
+read -p "Enter GitHub Token (leave empty if repo is public): " GITHUB_TOKEN < /dev/tty
 
-read -p "Update frequency (realtime/daily/weekly) [daily]: " UPDATE_FREQ
+read -p "Update frequency (realtime/daily/weekly) [daily]: " UPDATE_FREQ < /dev/tty
 UPDATE_FREQ=${UPDATE_FREQ:-daily}
 
 # LIMS uses Postgres + Redis
 echo -e "${GREEN}Database selected: PostgreSQL & Redis${NC}"
-read -p "PostgreSQL password: " -s DB_PASSWORD
+read -p "PostgreSQL password: " -s DB_PASSWORD < /dev/tty
 echo
-read -p "Redis password: " -s REDIS_PASSWORD
+read -p "Redis password: " -s REDIS_PASSWORD < /dev/tty
 echo
 
 # ============================================
