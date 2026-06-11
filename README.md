@@ -31,8 +31,13 @@ Berikut adalah bagaimana ekosistem LIMS Anda bekerja dari hulu (Developer) ke hi
 *Ini terjadi di komputer server On-Premise*
 
 1. Klien / Teknisi Anda mengeksekusi perintah 1-klik:
+   **Untuk Linux / Mac:**
    ```bash
    curl -fsSL https://raw.githubusercontent.com/AriaPutra01/fastlis-deployment/main/install.sh | bash
+   ```
+   **Untuk Windows (Jalankan PowerShell sebagai Administrator):**
+   ```powershell
+   Invoke-RestMethod -Uri "https://raw.githubusercontent.com/AriaPutra01/fastlis-deployment/main/install.ps1" | Invoke-Expression
    ```
 2. `install.sh` melakukan keajaibannya:
    - Memastikan Docker & Docker Compose terinstal.
