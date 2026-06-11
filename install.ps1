@@ -174,7 +174,19 @@ Write-Host "`n=== Step 6: First Deployment ===" -ForegroundColor Blue
 
 if (-not [string]::IsNullOrWhiteSpace($GITHUB_TOKEN)) {
     Write-Host "Logging in to GitHub Container Registry (GHCR)..." -ForegroundColor Yellow
-    $GITHUB_TOKEN | docker login ghcr.io -u AriaPutra01 --password-stdin
+    
+    # Logout dulu untuk clear state lama
+    docker logout ghcr.io 2>$null
+    
+    # Login dengan PAT
+    echo $GITHUB_TOKEN | docker login ghcr.io -u AriaPutra01 --password-stdin
+    
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "✓ GHCR login successful" -ForegroundColor Green
+        Start-Sleep -Seconds 3  # Tunggu daemon register credentials
+    } else {
+        Write-Host "⚠️ GHCR login failed, continuing anyway..." -ForegroundColor Yellow
+    }
 }
 
 Write-Host "Pulling Docker images..." -ForegroundColor Yellow
