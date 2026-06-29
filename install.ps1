@@ -106,6 +106,10 @@ $Bytes = New-Object Byte[] 32
 (New-Object Security.Cryptography.RNGCryptoServiceProvider).GetBytes($Bytes)
 $JWT_SECRET = -join ($Bytes | ForEach-Object { "{0:x2}" -f $_ })
 
+$KeyBytes = New-Object Byte[] 16
+(New-Object Security.Cryptography.RNGCryptoServiceProvider).GetBytes($KeyBytes)
+$INTERNAL_API_KEY = -join ($KeyBytes | ForEach-Object { "{0:x2}" -f $_ })
+
 $EnvContent = @"
 # Auto-generated configuration
 APP_NAME=$APP_NAME
@@ -132,6 +136,13 @@ JWT_SECRET=$JWT_SECRET
 JWT_ACCESS_EXPIRY=60
 JWT_REFRESH_EXPIRY=7
 LOG_LEVEL=4
+
+# Integration & Messaging
+RABBITMQ_USER=guest
+RABBITMQ_PASS=guest
+INTERNAL_API_KEY=$INTERNAL_API_KEY
+MIDDLEWARE_URL=
+MIDDLEWARE_API_KEY=
 "@
 
 Set-Content -Path ".env" -Value $EnvContent -Encoding UTF8

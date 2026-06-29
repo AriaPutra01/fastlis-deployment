@@ -102,6 +102,7 @@ echo -e "${BLUE}=== Step 4: Creating Configuration ===${NC}"
 
 # Generate random JWT secret if not provided
 JWT_SECRET=$(openssl rand -hex 32)
+INTERNAL_API_KEY=$(openssl rand -hex 16)
 
 cat > .env << EOF
 # Auto-generated configuration
@@ -129,6 +130,13 @@ JWT_SECRET=$JWT_SECRET
 JWT_ACCESS_EXPIRY=60
 JWT_REFRESH_EXPIRY=7
 LOG_LEVEL=4
+
+# Integration & Messaging
+RABBITMQ_USER=guest
+RABBITMQ_PASS=guest
+INTERNAL_API_KEY=$INTERNAL_API_KEY
+MIDDLEWARE_URL=
+MIDDLEWARE_API_KEY=
 EOF
 
 echo -e "${GREEN}✓ Configuration saved to .env${NC}"
