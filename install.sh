@@ -37,7 +37,16 @@ echo
 read -p "Redis password: " -s REDIS_PASSWORD < /dev/tty
 echo
 
-# ============================================
+echo -e "${BLUE}=== LIMS Integration (fastlis-sync) ===${NC}"
+read -p "Bridge Mode (API/DB) [API]: " BRIDGE_MODE < /dev/tty
+BRIDGE_MODE=${BRIDGE_MODE:-API}
+
+read -p "SIMRS Webhook URL (for Results) [http://simrs/webhook]: " SIMRS_WEBHOOK_URL < /dev/tty
+SIMRS_WEBHOOK_URL=${SIMRS_WEBHOOK_URL:-http://simrs/webhook}
+
+read -p "Sync Port [8081]: " SYNC_PORT < /dev/tty
+SYNC_PORT=${SYNC_PORT:-8081}
+
 # STEP 2: SYSTEM CHECK
 # ============================================
 echo -e "${BLUE}=== Step 2: System Verification ===${NC}"
@@ -131,12 +140,17 @@ JWT_ACCESS_EXPIRY=60
 JWT_REFRESH_EXPIRY=7
 LOG_LEVEL=4
 
-# Integration & Messaging
+# Integration & Messaging (fastlis-v2 Core)
 RABBITMQ_USER=guest
 RABBITMQ_PASS=guest
 INTERNAL_API_KEY=$INTERNAL_API_KEY
 MIDDLEWARE_URL=
 MIDDLEWARE_API_KEY=
+
+# Sync Proxy (fastlis-sync)
+BRIDGE_MODE=$BRIDGE_MODE
+SIMRS_WEBHOOK_URL=$SIMRS_WEBHOOK_URL
+SYNC_PORT=$SYNC_PORT
 EOF
 
 echo -e "${GREEN}✓ Configuration saved to .env${NC}"
@@ -188,6 +202,7 @@ echo ""
 echo "📋 Quick Links:"
 echo "  Frontend: http://localhost:5173"
 echo "  Backend API: http://localhost:8080"
+echo "  Sync Proxy (Mode $BRIDGE_MODE): http://localhost:$SYNC_PORT"
 echo "  Logs: docker compose logs -f"
 echo "  Update now: lims-update"
 echo "  View status: docker compose ps"

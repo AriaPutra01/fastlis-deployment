@@ -46,6 +46,16 @@ $DB_PASSWORD_PLAIN = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([
 $REDIS_PASSWORD = Read-Host -AsSecureString "Redis password"
 $REDIS_PASSWORD_PLAIN = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($REDIS_PASSWORD))
 
+Write-Host "`n=== LIMS Integration (fastlis-sync) ===" -ForegroundColor Blue
+$BRIDGE_MODE = Read-Host "Bridge Mode (API/DB) [API]"
+if ([string]::IsNullOrWhiteSpace($BRIDGE_MODE)) { $BRIDGE_MODE = "API" }
+
+$SIMRS_WEBHOOK_URL = Read-Host "SIMRS Webhook URL (for Results) [http://simrs/webhook]"
+if ([string]::IsNullOrWhiteSpace($SIMRS_WEBHOOK_URL)) { $SIMRS_WEBHOOK_URL = "http://simrs/webhook" }
+
+$SYNC_PORT = Read-Host "Sync Port [8081]"
+if ([string]::IsNullOrWhiteSpace($SYNC_PORT)) { $SYNC_PORT = "8081" }
+
 # ============================================
 # STEP 2: SYSTEM CHECK
 # ============================================
@@ -137,12 +147,17 @@ JWT_ACCESS_EXPIRY=60
 JWT_REFRESH_EXPIRY=7
 LOG_LEVEL=4
 
-# Integration & Messaging
+# Integration & Messaging (fastlis-v2 Core)
 RABBITMQ_USER=guest
 RABBITMQ_PASS=guest
 INTERNAL_API_KEY=$INTERNAL_API_KEY
 MIDDLEWARE_URL=
 MIDDLEWARE_API_KEY=
+
+# Sync Proxy (fastlis-sync)
+BRIDGE_MODE=$BRIDGE_MODE
+SIMRS_WEBHOOK_URL=$SIMRS_WEBHOOK_URL
+SYNC_PORT=$SYNC_PORT
 "@
 
 Set-Content -Path ".env" -Value $EnvContent -Encoding UTF8
@@ -225,6 +240,7 @@ Write-Host "✓ Installation Complete!`n" -ForegroundColor Green
 Write-Host "📋 Quick Links:"
 Write-Host "  Frontend: http://localhost:5173"
 Write-Host "  Backend API: http://localhost:8080"
+Write-Host "  Sync Proxy (Mode $BRIDGE_MODE): http://localhost:$SYNC_PORT"
 Write-Host "  Logs: docker compose logs -f"
 Write-Host "  View status: docker compose ps"
 Write-Host ""

@@ -26,6 +26,12 @@ Berikut adalah bagaimana ekosistem LIMS Anda bekerja dari hulu (Developer) ke hi
 3. Paket didorong ke rak penyimpanan **GHCR** sebagai:
    - `ghcr.io/ariaputra01/fastlis-backend:latest`
    - `ghcr.io/ariaputra01/fastlis-frontend:latest`
+   - `ghcr.io/ariaputra01/fastlis-sync:latest` (Adapter SIMRS Dual-Mode)
+
+### TAHAP 1.5: Opsi Integrasi SIMRS (fastlis-sync)
+Sistem ini dilengkapi dengan `fastlis-sync` yang bisa berjalan dalam 2 mode (diatur via saat instalasi):
+- **Mode API**: Bertindak sebagai Webhook Proxy. Eksternal menembak HTTP POST ke `http://<ip>:8081/api/webhook/orders`.
+- **Mode DB**: Bertindak sebagai *Background Worker*. Eksternal menulis langsung ke tabel `registration` dan `ordered_item` di PostgreSQL, lalu sistem akan memprosesnya.
 
 ### TAHAP 2: Inisialisasi Server Klien (Satu Kali Saja)
 *Ini terjadi di komputer server On-Premise*

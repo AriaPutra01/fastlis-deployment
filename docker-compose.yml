@@ -47,6 +47,27 @@ services:
     networks:
       - fastlis_network
 
+  sync:
+    image: ghcr.io/ariaputra01/fastlis-sync:latest
+    container_name: fastlis-sync
+    restart: unless-stopped
+    ports:
+      - "${SYNC_PORT:-8081}:8081"
+    environment:
+      BRIDGE_MODE: ${BRIDGE_MODE:-API}
+      DATABASE_URL: postgres://${BLUEPRINT_DB_USERNAME:-postgres}:${BLUEPRINT_DB_PASSWORD}@psql_bp:5432/${BLUEPRINT_DB_DATABASE:-fastlis}?sslmode=disable
+      FASTLIS_V2_URL: http://app:${PORT:-8080}
+      FASTLIS_V2_API_KEY: ${INTERNAL_API_KEY}
+      SIMRS_WEBHOOK_URL: ${SIMRS_WEBHOOK_URL}
+      HTTP_SERVER_ADDRESS: :8081
+    depends_on:
+      app:
+        condition: service_started
+      psql_bp:
+        condition: service_healthy
+    networks:
+      - fastlis_network
+
   psql_bp:
     image: postgres:18-alpine
     container_name: fastlis-db
