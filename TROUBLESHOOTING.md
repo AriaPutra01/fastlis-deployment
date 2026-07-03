@@ -32,4 +32,5 @@ docker compose down -v
 
 # Re-run installer
 ./install.sh            
+./install.ps1            
 ```

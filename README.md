@@ -53,21 +53,9 @@ Sistem ini dilengkapi dengan `fastlis-sync` yang bisa berjalan dalam 2 mode (dia
    - Mengeksekusi `docker compose up -d` untuk pertama kalinya.
 
 ### TAHAP 3: Hari-ke-Hari (Operasional & Pemeliharaan Klien)
-*Infrastruktur berjalan secara background (Ansible-pull flow)*
 
 1. Klien menggunakan aplikasi via `http://<ip-klien>:5173`. Database & Redis bekerja dari dalam container.
 2. Teknisi klien bisa melakukan pemeliharaan database secara mandiri menggunakan `scripts/backup.sh` atau `scripts/restore.sh`.
-
-### TAHAP 4: Siklus Pembaruan Otomatis (Auto-Update)
-*Ketika Anda merilis fitur baru di masa depan*
-
-1. Anda me-rilis versi `v1.3.0` di repo utama. GHCR akan ter-update dengan *image* baru.
-2. Jika ada perubahan infrastruktur (misal tambah container MinIO), Anda perbarui `docker-compose.yml` di repo ini.
-3. **Di Server Klien:** Tepat pukul 02:00 pagi (sesuai setting cron job):
-   - Sistem klien memanggil perintah `git pull` dari repositori ini, mengambil `docker-compose.yml` paling anyar.
-   - Sistem mengeksekusi `docker compose pull` untuk mengunduh *image* LIMS `v1.3.0` dari GHCR.
-   - Sistem mengeksekusi `docker compose up -d`. Kontainer lama dimatikan sekilas, dan diganti dengan versi baru.
-   - *Downtime* terjadi kurang dari 5 detik, klien mendapatkan fitur baru keesokan paginya tanpa campur tangan teknisi!
 
 ---
 
@@ -76,9 +64,9 @@ Sistem ini dilengkapi dengan `fastlis-sync` yang bisa berjalan dalam 2 mode (dia
 ```text
 ├── docker-compose.yml          # Resep Docker untuk Production (Tarik dari GHCR)
 ├── install.sh                  # Skrip Instalasi 1-Klik interaktif
+├── install.ps1                 # Skrip Instalasi 1-Klik interaktif
 ├── TROUBLESHOOTING.md          # Panduan kilat atasi error klien
 └── scripts/
-    ├── ansible-pull-setup.sh   # Skrip setup otomatisasi pembaruan background
     ├── backup.sh               # Utilitas backup database Postgres
     └── restore.sh              # Utilitas restore database Postgres
 ```

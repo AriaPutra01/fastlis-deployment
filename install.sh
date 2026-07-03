@@ -27,9 +27,6 @@ INSTALL_PATH=${INSTALL_PATH:-/opt/fastlis}
 
 read -p "Enter GitHub Token (leave empty if repo is public): " GITHUB_TOKEN < /dev/tty
 
-read -p "Update frequency (realtime/daily/weekly) [daily]: " UPDATE_FREQ < /dev/tty
-UPDATE_FREQ=${UPDATE_FREQ:-daily}
-
 # LIMS uses Postgres + Redis
 echo -e "${GREEN}Database selected: PostgreSQL & Redis${NC}"
 read -p "PostgreSQL password: " -s DB_PASSWORD < /dev/tty
@@ -88,7 +85,7 @@ check_command "docker-compose" || install_docker_compose
 echo -e "${BLUE}=== Step 3: Creating Installation Directory ===${NC}"
 
 sudo mkdir -p $INSTALL_PATH
-sudo chown $USER:$USER $INSTALL_PATH
+sudo chown $USER $INSTALL_PATH
 
 cd $INSTALL_PATH
 
@@ -156,23 +153,9 @@ EOF
 echo -e "${GREEN}✓ Configuration saved to .env${NC}"
 
 # ============================================
-# STEP 5: SETUP AUTO-UPDATES
+# STEP 5: FIRST DEPLOYMENT
 # ============================================
-echo -e "${BLUE}=== Step 5: Configuring Auto-Updates ===${NC}"
-
-if [ -f "scripts/ansible-pull-setup.sh" ]; then
-  sudo cp -f scripts/ansible-pull-setup.sh /usr/local/bin/lims-deploy-setup
-  sudo chmod +x /usr/local/bin/lims-deploy-setup
-  sudo /usr/local/bin/lims-deploy-setup "$INSTALL_PATH" "$UPDATE_FREQ"
-  echo -e "${GREEN}✓ Auto-update configured${NC}"
-else
-  echo -e "${YELLOW}⚠️ Auto-update script not found, skipping...${NC}"
-fi
-
-# ============================================
-# STEP 6: FIRST DEPLOYMENT
-# ============================================
-echo -e "${BLUE}=== Step 6: First Deployment ===${NC}"
+echo -e "${BLUE}=== Step 5: First Deployment ===${NC}"
 
 if [ ! -z "$GITHUB_TOKEN" ]; then
   echo -e "${YELLOW}Logging in to GitHub Container Registry (GHCR)...${NC}"
@@ -193,9 +176,9 @@ else
 fi
 
 # ============================================
-# STEP 7: POST-INSTALL
+# STEP 6: POST-INSTALL
 # ============================================
-echo -e "${BLUE}=== Step 7: Post-Installation Setup ===${NC}"
+echo -e "${BLUE}=== Step 6: Post-Installation Setup ===${NC}"
 
 echo -e "${GREEN}✓ Installation Complete!${NC}"
 echo ""

@@ -35,9 +35,6 @@ if ([string]::IsNullOrWhiteSpace($INSTALL_PATH)) { $INSTALL_PATH = "C:\fastlis" 
 
 $GITHUB_TOKEN = Read-Host "Enter GitHub Token (leave empty if repo is public)"
 
-$UPDATE_FREQ = Read-Host "Update frequency (daily/weekly) [daily]"
-if ([string]::IsNullOrWhiteSpace($UPDATE_FREQ)) { $UPDATE_FREQ = "daily" }
-
 Write-Host "`nDatabase selected: PostgreSQL & Redis" -ForegroundColor Green
 
 $DB_PASSWORD = Read-Host -AsSecureString "PostgreSQL password"
@@ -164,39 +161,9 @@ Set-Content -Path ".env" -Value $EnvContent -Encoding UTF8
 Write-Host "✓ Configuration saved to .env" -ForegroundColor Green
 
 # ============================================
-# STEP 5: SETUP AUTO-UPDATES (Windows Task Scheduler)
+# STEP 5: FIRST DEPLOYMENT
 # ============================================
-Write-Host "`n=== Step 5: Configuring Auto-Updates ===" -ForegroundColor Blue
-
-$UpdateScriptPath = Join-Path $INSTALL_PATH "update.ps1"
-$UpdateScriptContent = @"
-Set-Location '$INSTALL_PATH'
-git pull
-docker compose pull
-docker compose up -d
-"@
-Set-Content -Path $UpdateScriptPath -Value $UpdateScriptContent -Encoding UTF8
-
-# Create Scheduled Task Action
-$Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-ExecutionPolicy Bypass -WindowStyle Hidden -File `"$UpdateScriptPath`""
-
-# Create Scheduled Task Trigger based on frequency
-if ($UPDATE_FREQ -eq "daily") {
-    $Trigger = New-ScheduledTaskTrigger -Daily -At 3:00AM
-} else {
-    $Trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Sunday -At 3:00AM
-}
-
-# Register the task
-$TaskName = "LIMS_AutoUpdate_$APP_NAME"
-Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName $TaskName -Description "Auto-update LIMS application" -User "SYSTEM" -Force | Out-Null
-
-Write-Host "✓ Auto-update configured via Task Scheduler ($TaskName)" -ForegroundColor Green
-
-# ============================================
-# STEP 6: FIRST DEPLOYMENT
-# ============================================
-Write-Host "`n=== Step 6: First Deployment ===" -ForegroundColor Blue
+Write-Host "`n=== Step 5: First Deployment ===" -ForegroundColor Blue
 
 if (-not [string]::IsNullOrWhiteSpace($GITHUB_TOKEN)) {
     Write-Host "Logging in to GitHub Container Registry (GHCR)..." -ForegroundColor Yellow
@@ -232,9 +199,9 @@ if ($runningContainers) {
 }
 
 # ============================================
-# STEP 7: POST-INSTALL
+# STEP 6: POST-INSTALL
 # ============================================
-Write-Host "`n=== Step 7: Post-Installation Setup ===" -ForegroundColor Blue
+Write-Host "`n=== Step 6: Post-Installation Setup ===" -ForegroundColor Blue
 
 Write-Host "✓ Installation Complete!`n" -ForegroundColor Green
 Write-Host "📋 Quick Links:"
