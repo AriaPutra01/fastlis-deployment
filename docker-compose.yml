@@ -22,9 +22,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       JWT_ACCESS_EXPIRY: 15
       JWT_REFRESH_EXPIRY: 7
-      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
-      MIDDLEWARE_URL: ${MIDDLEWARE_URL}
-      MIDDLEWARE_API_KEY: ${MIDDLEWARE_API_KEY}
+      API_KEY: ${API_KEY}
       RABBITMQ_URL: amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASS:-guest}@rabbitmq_bp:5672/
     depends_on:
       psql_bp:
@@ -57,8 +55,7 @@ services:
       BRIDGE_MODE: ${BRIDGE_MODE:-API}
       DATABASE_URL: postgres://${BLUEPRINT_DB_USERNAME:-postgres}:${BLUEPRINT_DB_PASSWORD}@psql_bp:5432/${BLUEPRINT_DB_DATABASE:-fastlis}?sslmode=disable
       FASTLIS_V2_URL: http://app:${PORT:-8080}
-      FASTLIS_V2_API_KEY: ${INTERNAL_API_KEY}
-      SIMRS_WEBHOOK_URL: ${SIMRS_WEBHOOK_URL}
+      FASTLIS_V2_API_KEY: ${API_KEY}
       HTTP_SERVER_ADDRESS: :8081
     depends_on:
       app:

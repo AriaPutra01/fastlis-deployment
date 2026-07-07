@@ -47,9 +47,6 @@ Write-Host "`n=== LIMS Integration (fastlis-sync) ===" -ForegroundColor Blue
 $BRIDGE_MODE = Read-Host "Bridge Mode (API/DB) [API]"
 if ([string]::IsNullOrWhiteSpace($BRIDGE_MODE)) { $BRIDGE_MODE = "API" }
 
-$SIMRS_WEBHOOK_URL = Read-Host "SIMRS Webhook URL (for Results) [http://simrs/webhook]"
-if ([string]::IsNullOrWhiteSpace($SIMRS_WEBHOOK_URL)) { $SIMRS_WEBHOOK_URL = "http://simrs/webhook" }
-
 $SYNC_PORT = Read-Host "Sync Port [8081]"
 if ([string]::IsNullOrWhiteSpace($SYNC_PORT)) { $SYNC_PORT = "8081" }
 
@@ -115,7 +112,7 @@ $JWT_SECRET = -join ($Bytes | ForEach-Object { "{0:x2}" -f $_ })
 
 $KeyBytes = New-Object Byte[] 16
 (New-Object Security.Cryptography.RNGCryptoServiceProvider).GetBytes($KeyBytes)
-$INTERNAL_API_KEY = -join ($KeyBytes | ForEach-Object { "{0:x2}" -f $_ })
+$API_KEY = -join ($KeyBytes | ForEach-Object { "{0:x2}" -f $_ })
 
 $EnvContent = @"
 # Auto-generated configuration
@@ -147,13 +144,10 @@ LOG_LEVEL=4
 # Integration & Messaging (fastlis-v2 Core)
 RABBITMQ_USER=guest
 RABBITMQ_PASS=guest
-INTERNAL_API_KEY=$INTERNAL_API_KEY
-MIDDLEWARE_URL=
-MIDDLEWARE_API_KEY=
+API_KEY=$API_KEY
 
 # Sync Proxy (fastlis-sync)
 BRIDGE_MODE=$BRIDGE_MODE
-SIMRS_WEBHOOK_URL=$SIMRS_WEBHOOK_URL
 SYNC_PORT=$SYNC_PORT
 "@
 

@@ -38,9 +38,6 @@ echo -e "${BLUE}=== LIMS Integration (fastlis-sync) ===${NC}"
 read -p "Bridge Mode (API/DB) [API]: " BRIDGE_MODE < /dev/tty
 BRIDGE_MODE=${BRIDGE_MODE:-API}
 
-read -p "SIMRS Webhook URL (for Results) [http://simrs/webhook]: " SIMRS_WEBHOOK_URL < /dev/tty
-SIMRS_WEBHOOK_URL=${SIMRS_WEBHOOK_URL:-http://simrs/webhook}
-
 read -p "Sync Port [8081]: " SYNC_PORT < /dev/tty
 SYNC_PORT=${SYNC_PORT:-8081}
 
@@ -108,7 +105,7 @@ echo -e "${BLUE}=== Step 4: Creating Configuration ===${NC}"
 
 # Generate random JWT secret if not provided
 JWT_SECRET=$(openssl rand -hex 32)
-INTERNAL_API_KEY=$(openssl rand -hex 16)
+API_KEY=$(openssl rand -hex 16)
 
 cat > .env << EOF
 # Auto-generated configuration
@@ -140,13 +137,10 @@ LOG_LEVEL=4
 # Integration & Messaging (fastlis-v2 Core)
 RABBITMQ_USER=guest
 RABBITMQ_PASS=guest
-INTERNAL_API_KEY=$INTERNAL_API_KEY
-MIDDLEWARE_URL=
-MIDDLEWARE_API_KEY=
+API_KEY=$API_KEY
 
 # Sync Proxy (fastlis-sync)
 BRIDGE_MODE=$BRIDGE_MODE
-SIMRS_WEBHOOK_URL=$SIMRS_WEBHOOK_URL
 SYNC_PORT=$SYNC_PORT
 EOF
 
