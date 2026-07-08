@@ -24,6 +24,8 @@ services:
       JWT_REFRESH_EXPIRY: 7
       API_KEY: ${API_KEY}
       RABBITMQ_URL: amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASS:-guest}@rabbitmq_bp:5672/
+    volumes:
+      - app_media:/app/storage/public/media
     depends_on:
       psql_bp:
         condition: service_healthy
@@ -76,7 +78,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - psql_data:/var/lib/postgresql/18/data
+      - psql_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${BLUEPRINT_DB_USERNAME:-postgres} -d ${BLUEPRINT_DB_DATABASE:-fastlis}"]
       interval: 5s
@@ -121,6 +123,7 @@ volumes:
   psql_data:
   redis_data:
   rabbitmq_data:
+  app_media:
 
 networks:
   fastlis_network:
