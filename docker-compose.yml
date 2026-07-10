@@ -55,7 +55,7 @@ services:
       - "${SYNC_PORT:-8081}:8081"
     environment:
       BRIDGE_MODE: ${BRIDGE_MODE:-API}
-      DATABASE_URL: postgres://${BLUEPRINT_DB_USERNAME:-postgres}:${BLUEPRINT_DB_PASSWORD}@psql_bp:5432/${BLUEPRINT_DB_DATABASE:-fastlis}?sslmode=disable
+      DATABASE_URL: ${SYNC_DATABASE_URL}
       FASTLIS_V2_URL: http://app:${PORT:-8080}
       FASTLIS_V2_API_KEY: ${API_KEY}
       HTTP_SERVER_ADDRESS: :8081

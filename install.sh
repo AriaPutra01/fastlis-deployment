@@ -41,6 +41,10 @@ BRIDGE_MODE=${BRIDGE_MODE:-API}
 read -p "Sync Port [8081]: " SYNC_PORT < /dev/tty
 SYNC_PORT=${SYNC_PORT:-8081}
 
+if [ "$BRIDGE_MODE" == "DB" ]; then
+  read -p "SIMRS Database URL [user:pass@tcp(host:port)/dbname]: " SYNC_DATABASE_URL < /dev/tty
+fi
+
 # STEP 2: SYSTEM CHECK
 # ============================================
 echo -e "${BLUE}=== Step 2: System Verification ===${NC}"
@@ -142,6 +146,7 @@ API_KEY=$API_KEY
 # Sync Proxy (fastlis-sync)
 BRIDGE_MODE=$BRIDGE_MODE
 SYNC_PORT=$SYNC_PORT
+SYNC_DATABASE_URL=$SYNC_DATABASE_URL
 EOF
 
 echo -e "${GREEN}✓ Configuration saved to .env${NC}"

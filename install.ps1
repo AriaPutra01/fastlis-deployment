@@ -50,6 +50,12 @@ if ([string]::IsNullOrWhiteSpace($BRIDGE_MODE)) { $BRIDGE_MODE = "API" }
 $SYNC_PORT = Read-Host "Sync Port [8081]"
 if ([string]::IsNullOrWhiteSpace($SYNC_PORT)) { $SYNC_PORT = "8081" }
 
+if ($BRIDGE_MODE -eq "DB") {
+    $SYNC_DATABASE_URL = Read-Host "SIMRS Database URL [user:pass@tcp(host:port)/dbname]"
+} else {
+    $SYNC_DATABASE_URL = ""
+}
+
 # ============================================
 # STEP 2: SYSTEM CHECK
 # ============================================
@@ -149,6 +155,7 @@ API_KEY=$API_KEY
 # Sync Proxy (fastlis-sync)
 BRIDGE_MODE=$BRIDGE_MODE
 SYNC_PORT=$SYNC_PORT
+SYNC_DATABASE_URL=$SYNC_DATABASE_URL
 "@
 
 Set-Content -Path ".env" -Value $EnvContent -Encoding UTF8
