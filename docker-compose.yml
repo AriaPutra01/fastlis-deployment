@@ -68,7 +68,7 @@ services:
       - fastlis_network
 
   psql_bp:
-    image: postgres:18-alpine
+    image: postgres:16-alpine
     container_name: fastlis-db
     restart: unless-stopped
     environment:
@@ -103,7 +103,7 @@ services:
       - fastlis_network
 
   rabbitmq_bp:
-    image: rabbitmq:4-management-alpine
+    image: rabbitmq:management-alpine
     container_name: fastlis-rabbitmq
     restart: unless-stopped
     environment:
