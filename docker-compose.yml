@@ -23,15 +23,12 @@ services:
       JWT_ACCESS_EXPIRY: 15
       JWT_REFRESH_EXPIRY: 7
       API_KEY: ${API_KEY}
-      RABBITMQ_URL: amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASS:-guest}@rabbitmq_bp:5672/
     volumes:
       - app_media:/app/storage/public/media
     depends_on:
       psql_bp:
         condition: service_healthy
       redis_bp:
-        condition: service_healthy
-      rabbitmq_bp:
         condition: service_healthy
     networks:
       - fastlis_network
@@ -102,27 +99,9 @@ services:
     networks:
       - fastlis_network
 
-  rabbitmq_bp:
-    image: rabbitmq:management-alpine
-    container_name: fastlis-rabbitmq
-    restart: unless-stopped
-    environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-    healthcheck:
-      test: rabbitmq-diagnostics check_port_connectivity
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    networks:
-      - fastlis_network
-
 volumes:
   psql_data:
   redis_data:
-  rabbitmq_data:
   app_media:
 
 networks:

@@ -138,9 +138,7 @@ JWT_ACCESS_EXPIRY=60
 JWT_REFRESH_EXPIRY=7
 LOG_LEVEL=4
 
-# Integration & Messaging (fastlis-v2 Core)
-RABBITMQ_USER=guest
-RABBITMQ_PASS=guest
+# Integration (fastlis-v2 Core)
 API_KEY=$API_KEY
 
 # Sync Proxy (fastlis-sync)
